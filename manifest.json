@@ -1,24 +1,22 @@
 {
   "name": "무음 카메라",
-  "short_name": "무음 카메라",
-  "description": "무음 촬영 + 46종 필터 + 뷰티 보정 + AI 스타일 변환 + 사진 편집",
-  "start_url": ".",
+  "short_name": "무음카메라",
+  "description": "무음 카메라 - Silent Camera PWA",
+  "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#E8E1D8",
-  "theme_color": "#E8E1D8",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "categories": ["photo", "utilities"],
   "icons": [
-    {
-      "src": "icon-192.svg",
-      "sizes": "192x192",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
-      "src": "icon-512.svg",
-      "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
+    { "src": "icons/icon-72.png",  "sizes": "72x72",   "type": "image/png" },
+    { "src": "icons/icon-96.png",  "sizes": "96x96",   "type": "image/png" },
+    { "src": "icons/icon-128.png", "sizes": "128x128", "type": "image/png" },
+    { "src": "icons/icon-144.png", "sizes": "144x144", "type": "image/png" },
+    { "src": "icons/icon-152.png", "sizes": "152x152", "type": "image/png" },
+    { "src": "icons/icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-384.png", "sizes": "384x384", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ]
 }

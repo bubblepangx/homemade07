@@ -1,11 +1,53 @@
-const CACHE='mueum-cam-v1';
-const ASSETS=['./','./index.html','./manifest.json','./icon-192.svg','./icon-512.svg'];
-self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)));self.skipWaiting()});
-self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim()});
-self.addEventListener('fetch',e=>{
-  if(e.request.method!=='GET')return;
-  if(e.request.url.includes('fonts.googleapis.com')||e.request.url.includes('fonts.gstatic.com')){
-    e.respondWith(fetch(e.request).then(r=>{const c=r.clone();caches.open(CACHE).then(ca=>ca.put(e.request,c));return r}).catch(()=>caches.match(e.request)));return;
-  }
-  e.respondWith(caches.match(e.request).then(c=>c||fetch(e.request)));
+/* =======================================
+   무음 카메라 - Service Worker
+   PWA 오프라인 지원 & 캐싱
+   ======================================= */
+
+const CACHE_NAME = 'silent-camera-v1';
+const ASSETS = [
+  './',
+  './index.html',
+  './manifest.json',
+  './apple-touch-icon.png',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+];
+
+// Install: cache core assets
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(ASSETS))
+      .then(() => self.skipWaiting())
+  );
+});
+
+// Activate: clean old caches
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+    ).then(() => self.clients.claim())
+  );
+});
+
+// Fetch: cache-first for assets, network-first for others
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then(cached => {
+      return cached || fetch(event.request).then(response => {
+        // Cache successful responses
+        if (response.ok && event.request.method === 'GET') {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+        }
+        return response;
+      });
+    }).catch(() => {
+      // Offline fallback
+      if (event.request.destination === 'document') {
+        return caches.match('./index.html');
+      }
+    })
+  );
 });
