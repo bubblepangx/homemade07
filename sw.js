@@ -3,7 +3,7 @@
    PWA 오프라인 지원 & 캐싱
    ======================================= */
 
-const CACHE_NAME = 'silent-camera-v1';
+const CACHE_NAME = 'silent-camera-v5';
 const ASSETS = [
   './',
   './index.html',

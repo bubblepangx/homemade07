@@ -7,183 +7,164 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="무음 카메라">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#000000">
+<meta name="theme-color" content="#f5f0e8">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap">
 <title>무음 카메라</title>
 <style>
-/* ==============================================
-   무음 카메라 v4.0 — Kinfolk Edition
-   ============================================== */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);
-  --kf-cream:#f5f0e8;--kf-warm:#e8ddd0;--kf-stone:#c4b8a8;
-  --kf-earth:#8a7e6e;--kf-dark:#3d3830;--kf-sage:#9ca88e;
-  --kf-blush:#d4b5a0;--kf-linen:#efe9df;
+  --kf-cream:#f5f0e8;--kf-warm:#ebe4d8;--kf-stone:#c4b8a8;
+  --kf-earth:#8a7e6e;--kf-dark:#3d3830;
   --ui-bg:rgba(0,0,0,.3);--accent:#e8d5b8;--text:#fff;--text-dim:rgba(255,255,255,.5);
-  --capture-size:72px;
+  --capture-size:68px;
 }
 html,body{width:100%;height:100%;overflow:hidden;background:#000;color:var(--text);
   font-family:'DM Sans',-apple-system,sans-serif;
   -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
 
-/* ================================================
-   KINFOLK PERMISSION SCREEN
-   ================================================ */
+/* ====== KINFOLK PERMISSION SCREEN (홈화면 추가 시 첫 화면) ====== */
 #permScreen{
   position:fixed;inset:0;z-index:1000;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:var(--kf-cream);transition:opacity .6s ease;
-  overflow:hidden;
+  background:var(--kf-cream);transition:opacity .6s ease;overflow:hidden;
 }
 #permScreen.hidden{opacity:0;pointer-events:none}
-
-/* Subtle texture overlay */
+/* Linen texture */
 #permScreen::before{
-  content:'';position:absolute;inset:0;
-  background:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='60' height='60' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+  content:'';position:absolute;inset:0;opacity:.04;
+  background:url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='40' height='40' filter='url(%23n)'/%3E%3C/svg%3E");
   pointer-events:none;
 }
-
-/* Decorative lines */
-.kf-line{position:absolute;background:var(--kf-stone);opacity:.25}
-.kf-line-h{width:120px;height:1px;left:50%;transform:translateX(-50%)}
-.kf-line-v{width:1px;height:60px;left:50%;transform:translateX(-50%)}
-
-#permScreen .kf-top-line{top:calc(var(--safe-top) + 40px)}
-#permScreen .kf-bot-line{bottom:calc(var(--safe-bottom) + 40px)}
-
-/* Camera icon — minimal line art */
-.perm-icon{
-  width:64px;height:64px;margin-bottom:32px;position:relative;
-}
+/* Top decorative element */
+.kf-deco{position:absolute;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px}
+.kf-deco-top{top:calc(var(--safe-top) + 32px)}
+.kf-deco-bot{bottom:calc(var(--safe-bottom) + 24px)}
+.kf-dot{width:4px;height:4px;border-radius:50%;background:var(--kf-stone);opacity:.4}
+.kf-line-h{width:40px;height:1px;background:var(--kf-stone);opacity:.3}
+/* Camera illustration */
+.perm-icon{width:56px;height:56px;margin-bottom:36px;opacity:.7}
 .perm-icon svg{width:100%;height:100%}
-
+/* Typography */
 .perm-title{
   font-family:'Cormorant Garamond',Georgia,serif;
-  font-size:32px;font-weight:300;font-style:italic;
-  color:var(--kf-dark);letter-spacing:1px;margin-bottom:8px;
+  font-size:36px;font-weight:300;font-style:italic;
+  color:var(--kf-dark);letter-spacing:.5px;margin-bottom:6px;
 }
-.perm-subtitle{
-  font-family:'DM Sans',sans-serif;font-size:11px;font-weight:400;
-  color:var(--kf-earth);letter-spacing:3px;text-transform:uppercase;margin-bottom:40px;
+.perm-sub{
+  font-family:'DM Sans',sans-serif;font-size:10px;font-weight:400;
+  color:var(--kf-stone);letter-spacing:4px;text-transform:uppercase;margin-bottom:48px;
 }
 .perm-desc{
   font-family:'Cormorant Garamond',Georgia,serif;
-  font-size:16px;font-weight:400;color:var(--kf-earth);
-  text-align:center;line-height:1.7;padding:0 50px;margin-bottom:44px;
-  max-width:320px;
+  font-size:17px;font-weight:400;color:var(--kf-earth);
+  text-align:center;line-height:1.8;margin-bottom:48px;max-width:260px;
 }
 #permBtn{
-  background:var(--kf-dark);color:var(--kf-cream);border:none;
-  padding:15px 52px;border-radius:0;font-family:'DM Sans',sans-serif;
-  font-size:12px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;
-  cursor:pointer;transition:all .2s;position:relative;
+  background:none;color:var(--kf-dark);
+  border:1px solid var(--kf-stone);
+  padding:14px 56px;border-radius:0;font-family:'DM Sans',sans-serif;
+  font-size:11px;font-weight:500;letter-spacing:3px;text-transform:uppercase;
+  cursor:pointer;transition:all .25s;
 }
-#permBtn:active{opacity:.7;transform:scale(.98)}
-#permBtn::before,#permBtn::after{
-  content:'';position:absolute;width:8px;height:8px;border:1px solid var(--kf-stone);
-}
-#permBtn::before{top:-4px;left:-4px;border-right:none;border-bottom:none}
-#permBtn::after{bottom:-4px;right:-4px;border-left:none;border-top:none}
-
+#permBtn:active{background:var(--kf-dark);color:var(--kf-cream)}
 .perm-credit{
-  position:absolute;bottom:calc(var(--safe-bottom) + 16px);
-  font-size:10px;letter-spacing:2px;color:var(--kf-stone);text-transform:uppercase;
+  position:absolute;bottom:calc(var(--safe-bottom) + 10px);
+  font-family:'Cormorant Garamond',serif;font-size:11px;font-style:italic;
+  color:var(--kf-stone);letter-spacing:1px;
 }
 
-/* ---- Camera ---- */
+/* ====== CAMERA ====== */
 #cameraLayer{position:fixed;inset:0;z-index:1;background:#000;overflow:hidden}
 #preview{width:100%;height:100%;object-fit:cover;transform-origin:center center;transition:filter .3s}
 #captureCanvas{display:none}
 #flash{position:fixed;inset:0;z-index:50;background:#fff;opacity:0;pointer-events:none;transition:opacity .08s}
-#flash.fire{opacity:.55}
+#flash.fire{opacity:.5}
 #gestureLayer{position:fixed;inset:0;z-index:10;touch-action:none}
 
-/* ---- Top Bar ---- */
+/* ====== TOP BAR ====== */
 #topBar{position:fixed;top:0;left:0;right:0;z-index:30;
   padding:calc(var(--safe-top)+8px) 16px 8px;
   display:flex;align-items:center;justify-content:space-between;
-  background:linear-gradient(to bottom,rgba(0,0,0,.45),transparent);pointer-events:none}
+  background:linear-gradient(to bottom,rgba(0,0,0,.4),transparent);pointer-events:none}
 #topBar>*{pointer-events:auto}
-.top-btn{width:40px;height:40px;border-radius:50%;background:var(--ui-bg);border:none;cursor:pointer;
+.top-btn{width:38px;height:38px;border-radius:50%;background:var(--ui-bg);border:none;cursor:pointer;
   display:flex;align-items:center;justify-content:center;color:#fff;
-  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);touch-action:manipulation;transition:background .2s}
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);touch-action:manipulation}
 .top-btn:active{background:rgba(255,255,255,.2)}
-.top-btn svg{width:22px;height:22px}
-#zoomBadge{position:fixed;right:10px;top:calc(50% - 170px);z-index:26;
+.top-btn svg{width:20px;height:20px}
+
+/* ====== ZOOM ====== */
+#zoomBadge{position:fixed;right:10px;top:calc(50% - 174px);z-index:26;
   background:var(--ui-bg);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
-  padding:4px 10px;border-radius:16px;font-size:12px;font-weight:600;
-  font-variant-numeric:tabular-nums;min-width:44px;text-align:center}
+  padding:3px 9px;border-radius:14px;font-size:11px;font-weight:600;
+  font-variant-numeric:tabular-nums;text-align:center}
+#zoomArc{position:fixed;right:8px;top:50%;transform:translateY(-50%);z-index:25;width:50px;height:280px;touch-action:none}
+#zoomArcSvg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 4px rgba(0,0,0,.5))}
+.arc-track{fill:none;stroke:rgba(255,255,255,.12);stroke-width:2.5;stroke-linecap:round}
+.arc-progress{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linecap:round}
+.arc-thumb{fill:#fff;stroke:var(--accent);stroke-width:2;filter:drop-shadow(0 1px 3px rgba(0,0,0,.4))}
+.arc-label{fill:rgba(255,255,255,.4);font-size:8px;font-weight:600;text-anchor:end}
 
-/* ---- Zoom Arc ---- */
-#zoomArc{position:fixed;right:8px;top:50%;transform:translateY(-50%);z-index:25;width:56px;height:300px;touch-action:none}
-#zoomArcSvg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 6px rgba(0,0,0,.5))}
-.arc-track{fill:none;stroke:rgba(255,255,255,.15);stroke-width:3;stroke-linecap:round}
-.arc-progress{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round}
-.arc-thumb{fill:#fff;stroke:var(--accent);stroke-width:2.5;filter:drop-shadow(0 1px 4px rgba(0,0,0,.5))}
-.arc-label{fill:rgba(255,255,255,.5);font-size:9px;font-weight:600;text-anchor:end}
-
-/* ---- Filter Grid (2 rows) ---- */
-#filterBar{position:fixed;bottom:calc(var(--safe-bottom)+110px);left:0;right:0;z-index:25;
-  display:flex;flex-wrap:wrap;justify-content:center;gap:5px;
-  padding:5px 10px;touch-action:manipulation}
-.filter-chip{display:inline-flex;align-items:center;justify-content:center;
-  padding:5px 11px;border-radius:16px;
-  border:1.5px solid rgba(255,255,255,.12);background:rgba(0,0,0,.35);
-  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
-  color:var(--text-dim);font-size:10px;font-weight:500;cursor:pointer;
-  transition:all .2s;touch-action:manipulation;letter-spacing:.2px}
-.filter-chip.active{border-color:var(--accent);color:var(--accent);background:rgba(232,213,184,.12)}
-.filter-chip:active{transform:scale(.95)}
-
-/* ---- Bottom Bar ---- */
-#bottomBar{position:fixed;bottom:0;left:0;right:0;z-index:25;
-  padding:10px 24px calc(var(--safe-bottom) + 20px);
-  display:flex;align-items:center;justify-content:space-between;
-  background:linear-gradient(to top,rgba(0,0,0,.6) 0%,rgba(0,0,0,.3) 60%,transparent 100%);touch-action:manipulation}
-#galleryBtn{width:48px;height:48px;border-radius:10px;border:2px solid rgba(255,255,255,.25);
+/* ====== BOTTOM: Capture row (above filters) ====== */
+#captureRow{position:fixed;bottom:calc(var(--safe-bottom) + 82px);left:0;right:0;z-index:26;
+  padding:0 32px;display:flex;align-items:center;justify-content:space-between;pointer-events:none}
+#captureRow>*{pointer-events:auto}
+#galleryBtn{width:44px;height:44px;border-radius:10px;border:1.5px solid rgba(255,255,255,.2);
   background:rgba(255,255,255,.05);cursor:pointer;position:relative;
-  display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:manipulation;transition:transform .2s}
+  display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:manipulation}
 #galleryBtn:active{transform:scale(.92)}
 #galleryBtn img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
-#galleryBtn svg{width:24px;height:24px;color:rgba(255,255,255,.35)}
-#photoBadge{position:absolute;top:-6px;right:-6px;background:var(--accent);color:#000;
-  font-size:10px;font-weight:700;min-width:20px;height:20px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;padding:0 5px}
+#galleryBtn svg{width:22px;height:22px;color:rgba(255,255,255,.3)}
+#photoBadge{position:absolute;top:-5px;right:-5px;background:var(--accent);color:#000;
+  font-size:9px;font-weight:700;min-width:18px;height:18px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;padding:0 4px}
 #photoBadge.hide{display:none}
 #captureBtn{width:var(--capture-size);height:var(--capture-size);border-radius:50%;
-  border:4px solid rgba(255,255,255,.75);background:transparent;cursor:pointer;
+  border:3.5px solid rgba(255,255,255,.7);background:transparent;cursor:pointer;
   display:flex;align-items:center;justify-content:center;position:relative;touch-action:manipulation}
 #captureBtn::after{content:'';position:absolute;inset:5px;border-radius:50%;
   background:rgba(255,255,255,.85);transition:transform .1s,background .1s}
 #captureBtn:active::after{transform:scale(.88);background:var(--accent)}
 #captureBtn.burst::after{transform:scale(.85);background:var(--accent)}
-#switchBtn{width:48px;height:48px;border-radius:50%;background:var(--ui-bg);border:none;cursor:pointer;
+#switchBtn{width:44px;height:44px;border-radius:50%;background:var(--ui-bg);border:none;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
-  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);touch-action:manipulation;transition:background .2s}
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);touch-action:manipulation}
 #switchBtn:active{background:rgba(255,255,255,.2)}
-#switchBtn svg{width:24px;height:24px;color:#fff;transition:transform .4s}
+#switchBtn svg{width:22px;height:22px;color:#fff;transition:transform .4s}
 #switchBtn.flip svg{transform:rotate(180deg)}
 
-/* ---- Toast ---- */
+/* ====== FILTER BAR (맨 아래) ====== */
+#filterBar{position:fixed;bottom:0;left:0;right:0;z-index:25;
+  display:flex;flex-wrap:wrap;justify-content:center;gap:4px 5px;
+  padding:6px 8px calc(var(--safe-bottom) + 10px);
+  background:linear-gradient(to top,rgba(0,0,0,.65) 0%,rgba(0,0,0,.35) 70%,transparent 100%);
+  touch-action:manipulation}
+.filter-chip{display:inline-flex;align-items:center;justify-content:center;
+  padding:4px 10px;border-radius:14px;
+  border:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.3);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  color:var(--text-dim);font-size:9.5px;font-weight:500;cursor:pointer;
+  transition:all .2s;touch-action:manipulation;letter-spacing:.2px}
+.filter-chip.active{border-color:var(--accent);color:var(--accent);background:rgba(232,213,184,.15)}
+.filter-chip:active{transform:scale(.95)}
+
+/* ====== TOAST ====== */
 #toast{position:fixed;top:calc(var(--safe-top)+60px);left:50%;
   transform:translateX(-50%) translateY(-20px);z-index:100;
-  background:rgba(20,20,22,.9);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
-  color:#fff;padding:10px 20px;border-radius:24px;font-size:13px;font-weight:500;
-  opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;display:flex;align-items:center;gap:6px}
+  background:rgba(20,20,22,.88);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  color:#fff;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:500;
+  opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;display:flex;align-items:center;gap:5px}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-#toast .check{color:#4cd964;font-size:16px}
-
-/* ---- Grid ---- */
+#toast .check{color:#4cd964;font-size:15px}
 #gridOverlay{position:fixed;inset:0;z-index:5;pointer-events:none;opacity:0;transition:opacity .3s}
 
-/* ---- Gallery ---- */
+/* ====== GALLERY ====== */
 #gallery{position:fixed;inset:0;z-index:200;background:#0a0a0c;
   transform:translateY(100%);transition:transform .35s cubic-bezier(.32,.72,.36,1);
   display:flex;flex-direction:column;padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
@@ -198,64 +179,50 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:var(--tex
 .gal-grid::-webkit-scrollbar{display:none}
 .gal-item{aspect-ratio:1;position:relative;cursor:pointer;overflow:hidden;border-radius:2px;background:rgba(255,255,255,.03)}
 .gal-item img{width:100%;height:100%;object-fit:cover}
-.gal-item .sel-check{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;
-  border:2px solid rgba(255,255,255,.6);background:transparent;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.gal-item .sel-check{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.5);background:transparent;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .gal-item.selected .sel-check{background:var(--accent);border-color:var(--accent)}
-.gal-item.selected .sel-check::after{content:'✓';color:#000;font-size:14px;font-weight:700}
+.gal-item.selected .sel-check::after{content:'✓';color:#000;font-size:13px;font-weight:700}
 .gal-toolbar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;flex-shrink:0;border-top:1px solid rgba(255,255,255,.08)}
 .gal-btn{padding:10px 20px;border-radius:24px;border:none;cursor:pointer;font-size:14px;font-weight:600;transition:all .15s;touch-action:manipulation}
 .gal-btn:active{transform:scale(.95)}
 .gal-btn-select{background:rgba(255,255,255,.1);color:#fff}
 .gal-btn-share{background:var(--accent);color:#000}
-.gal-btn-share:disabled,.gal-btn-delete:disabled{opacity:.35;cursor:default}
+.gal-btn-share:disabled,.gal-btn-delete:disabled{opacity:.35}
 .gal-btn-delete{background:rgba(255,60,60,.15);color:#ff4040}
 .gal-empty{display:none;flex-direction:column;align-items:center;justify-content:center;flex:1;color:var(--text-dim);gap:12px}
 .gal-empty svg{width:48px;height:48px;opacity:.3}
-.gal-empty p{font-size:14px}
-
-/* ---- Viewer ---- */
-#viewer{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;
-  opacity:0;pointer-events:none;transition:opacity .25s}
+#viewer{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
 #viewer.open{opacity:1;pointer-events:auto}
 #viewer img{max-width:100%;max-height:100%;object-fit:contain}
 #viewerClose{position:fixed;top:calc(var(--safe-top)+12px);right:16px;z-index:301;
   width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.15);border:none;cursor:pointer;
   display:flex;align-items:center;justify-content:center;color:#fff}
-
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
 </style>
 </head>
 <body>
 
-<!-- ========================================
-     KINFOLK-STYLE PERMISSION SCREEN
-     ======================================== -->
+<!-- ====== KINFOLK PERMISSION SCREEN ====== -->
 <div id="permScreen">
-  <div class="kf-line kf-line-h kf-top-line"></div>
+  <div class="kf-deco kf-deco-top"><div class="kf-dot"></div><div class="kf-line-h"></div></div>
 
   <div class="perm-icon">
-    <svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="10" y="20" width="44" height="30" rx="4" stroke="#8a7e6e" stroke-width="1.2"/>
-      <circle cx="32" cy="35" r="9" stroke="#8a7e6e" stroke-width="1.2"/>
-      <circle cx="32" cy="35" r="4" stroke="#c4b8a8" stroke-width=".8"/>
-      <path d="M22 20l3-7h14l3 7" stroke="#8a7e6e" stroke-width="1.2"/>
-      <circle cx="45" cy="26" r="2" fill="#c4b8a8" opacity=".5"/>
+    <svg viewBox="0 0 56 56" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="8" y="18" width="40" height="26" rx="3.5" stroke="#b0a494" stroke-width=".8"/>
+      <circle cx="28" cy="31" r="8" stroke="#b0a494" stroke-width=".8"/>
+      <circle cx="28" cy="31" r="3.5" stroke="#c4b8a8" stroke-width=".6"/>
+      <path d="M20 18l2.5-6h11l2.5 6" stroke="#b0a494" stroke-width=".8"/>
     </svg>
   </div>
 
   <h1 class="perm-title">무음 카메라</h1>
-  <p class="perm-subtitle">silent moments</p>
+  <p class="perm-sub">silent moments</p>
+  <p class="perm-desc">소리 없이, 순간을 담다.<br>한 번만 허용하면<br>다시 묻지 않아요.</p>
+  <button id="permBtn">시작하기</button>
 
-  <p class="perm-desc">
-    소리 없이, 순간을 담다.<br>
-    한 번만 허용하면<br>
-    다시 묻지 않아요.
-  </p>
-
-  <button id="permBtn">카메라 시작</button>
-
-  <div class="kf-line kf-line-h kf-bot-line"></div>
-  <span class="perm-credit">made with ❤</span>
+  <div class="kf-deco kf-deco-bot"><div class="kf-line-h"></div><div class="kf-dot"></div></div>
+  <span class="perm-credit">made with care</span>
 </div>
 
 <!-- Camera -->
@@ -277,10 +244,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:var(--tex
       <line id="flashOff" x1="4" y1="4" x2="20" y2="20" stroke-width="2"/></svg>
   </button>
 </div>
-<!-- Zoom badge (오른쪽 줌 Arc 위에 독립 배치) -->
 <div id="zoomBadge">1.0×</div>
 
-<!-- Grid -->
+<!-- Grid overlay -->
 <svg id="gridOverlay" viewBox="0 0 300 300" preserveAspectRatio="none" width="100%" height="100%">
   <line x1="100" y1="0" x2="100" y2="300" stroke="rgba(255,255,255,.18)" stroke-width=".5"/>
   <line x1="200" y1="0" x2="200" y2="300" stroke="rgba(255,255,255,.18)" stroke-width=".5"/>
@@ -290,33 +256,18 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:var(--tex
 
 <!-- Zoom Arc -->
 <div id="zoomArc">
-  <svg id="zoomArcSvg" viewBox="0 0 56 300">
-    <text class="arc-label" x="12" y="288">1×</text><text class="arc-label" x="12" y="218">2×</text>
-    <text class="arc-label" x="12" y="148">5×</text><text class="arc-label" x="12" y="78">10×</text>
-    <text class="arc-label" x="12" y="18">20×</text>
-    <path class="arc-track" d="M 32 284 Q 52 150 32 16"/>
-    <path id="arcProgress" class="arc-progress" d="M 32 284 Q 52 284 32 284"/>
-    <circle id="arcThumb" class="arc-thumb" cx="32" cy="284" r="10"/>
+  <svg id="zoomArcSvg" viewBox="0 0 50 280">
+    <text class="arc-label" x="10" y="272">1×</text><text class="arc-label" x="10" y="207">2×</text>
+    <text class="arc-label" x="10" y="142">5×</text><text class="arc-label" x="10" y="77">10×</text>
+    <text class="arc-label" x="10" y="16">20×</text>
+    <path class="arc-track" d="M 28 268 Q 46 140 28 12"/>
+    <path id="arcProgress" class="arc-progress" d="M 28 268 Q 46 268 28 268"/>
+    <circle id="arcThumb" class="arc-thumb" cx="28" cy="268" r="9"/>
   </svg>
 </div>
 
-<!-- Filter Grid (2 rows) -->
-<div id="filterBar">
-  <span class="filter-chip active" data-filter="none">원본</span>
-  <span class="filter-chip" data-filter="fs4">FS400</span>
-  <span class="filter-chip" data-filter="fujipro">Fuji Pro</span>
-  <span class="filter-chip" data-filter="ccdr">CCD R</span>
-  <span class="filter-chip" data-filter="kc25">KC25</span>
-  <span class="filter-chip" data-filter="portra">Portra</span>
-  <span class="filter-chip" data-filter="a4">A4</span>
-  <span class="filter-chip" data-filter="p160">160VC</span>
-  <span class="filter-chip" data-filter="agfa">Agfa</span>
-  <span class="filter-chip" data-filter="bw">B&W</span>
-  <span class="filter-chip" data-filter="pixel">Pixel</span>
-</div>
-
-<!-- Bottom Bar -->
-<div id="bottomBar">
+<!-- ====== CAPTURE ROW (촬영버튼) ====== -->
+<div id="captureRow">
   <div id="galleryBtn">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
     <img id="galleryThumb" src="" style="display:none">
@@ -330,6 +281,24 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:var(--tex
       <path d="M1 7l2-2 2 2"/><path d="M3 5v4"/>
       <path d="M23 17l-2 2-2-2"/><path d="M21 19v-4"/></svg>
   </button>
+</div>
+
+<!-- ====== FILTER BAR (맨 아래, 순서: 차분→필름→강한색→특수→흑백) ====== -->
+<div id="filterBar">
+  <span class="filter-chip active" data-filter="none">원본</span>
+  <span class="filter-chip" data-filter="portra">Portra</span>
+  <span class="filter-chip" data-filter="p160">160VC</span>
+  <span class="filter-chip" data-filter="fujipro">Fuji Pro</span>
+  <span class="filter-chip" data-filter="a4">A4</span>
+  <span class="filter-chip" data-filter="fs4">FS400</span>
+  <span class="filter-chip" data-filter="kc25">KC25</span>
+  <span class="filter-chip" data-filter="pantone">Pantone</span>
+  <span class="filter-chip" data-filter="agfa">Agfa</span>
+  <span class="filter-chip" data-filter="ccdr">CCD R</span>
+  <span class="filter-chip" data-filter="latin">Latin</span>
+  <span class="filter-chip" data-filter="cyber">Cyber</span>
+  <span class="filter-chip" data-filter="pixel">Pixel</span>
+  <span class="filter-chip" data-filter="bw">B&W</span>
 </div>
 
 <div id="toast"><span class="check">✓</span> <span id="toastMsg"></span></div>
@@ -348,290 +317,150 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:var(--tex
     <button class="gal-btn gal-btn-share" id="galShareBtn" disabled>내보내기</button>
   </div>
 </div>
-
-<!-- Viewer -->
 <div id="viewer">
   <button id="viewerClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="22" height="22"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg></button>
   <img id="viewerImg" src="">
 </div>
 
 <script>
-/* ==========================================================
-   무음 카메라 v4.0 — Kinfolk Edition
-   9 Film-accurate filters + Full-screen capture
-   ========================================================== */
+/* 무음 카메라 v5.0 — 14 Film Filters */
+const clp=v=>v<0?0:v>255?255:v;
+function hueRot(r,g,b,deg){const c=Math.cos(deg*Math.PI/180),s=Math.sin(deg*Math.PI/180);
+  return[clp(r*(.213+.787*c-.213*s)+g*(.715-.715*c-.715*s)+b*(.072-.072*c+.928*s)),
+  clp(r*(.213-.213*c+.143*s)+g*(.715+.285*c+.140*s)+b*(.072-.072*c-.283*s)),
+  clp(r*(.213-.213*c-.787*s)+g*(.715-.715*c+.715*s)+b*(.072+.928*c+.072*s))]}
+function sepiaMix(r,g,b,a){const sr=r*.393+g*.769+b*.189,sg=r*.349+g*.686+b*.168,sb=r*.272+g*.534+b*.131;return[r*(1-a)+sr*a,g*(1-a)+sg*a,b*(1-a)+sb*a]}
+function sat(r,g,b,s){const gr=.2126*r+.7152*g+.0722*b;return[gr+(r-gr)*s,gr+(g-gr)*s,gr+(b-gr)*s]}
+function bc(v,br,co){return(v*br-128)*co+128}
+function liftShadows(v,a){return v+a*(1-v/255)}
 
-// ===================================================
-//  FILM FILTERS — Accurate color science
-//  Each CSS: live preview (fast, GPU-accelerated)
-//  Each apply(): pixel manipulation for captured photo (Safari-safe)
-// ===================================================
+const FILTERS={
+  none:{css:'none',apply:null,pp:null},
 
-// Helper: clamp
-const clp = v => v<0?0:v>255?255:v;
+  // ── 차분한 톤 ──
+  portra:{css:'saturate(.8) contrast(.82) brightness(1.14) sepia(.08)',
+    apply(d){for(let i=0;i<d.length;i+=4){let r=d[i],g=d[i+1],b=d[i+2];
+      r=liftShadows(r,28);g=liftShadows(g,25);b=liftShadows(b,22);
+      r=bc(r,1.14,.82);g=bc(g,1.14,.82);b=bc(b,1.14,.82);
+      [r,g,b]=sepiaMix(r,g,b,.08);[r,g,b]=sat(r,g,b,.8);
+      const l=.2126*r+.7152*g+.0722*b;
+      if(l>70&&l<210){r+=8;g+=4;b-=2}if(l>100&&l<200){r+=4;g+=3;b+=2}
+      d[i]=clp(r);d[i+1]=clp(g);d[i+2]=clp(b)}},pp:'bloom-soft'},
 
-// Helper: hue-rotate matrix multiplication
-function hueRot(r,g,b,deg){
-  const c=Math.cos(deg*Math.PI/180),s=Math.sin(deg*Math.PI/180);
-  return [
-    clp(r*(.213+.787*c-.213*s)+g*(.715-.715*c-.715*s)+b*(.072-.072*c+.928*s)),
-    clp(r*(.213-.213*c+.143*s)+g*(.715+.285*c+.140*s)+b*(.072-.072*c-.283*s)),
-    clp(r*(.213-.213*c-.787*s)+g*(.715-.715*c+.715*s)+b*(.072+.928*c+.072*s))
-  ];
-}
+  p160:{css:'saturate(.75) contrast(.78) brightness(1.18) sepia(.06)',
+    apply(d){for(let i=0;i<d.length;i+=4){let r=d[i],g=d[i+1],b=d[i+2];
+      r=bc(r,1.18,.78);g=bc(g,1.18,.78);b=bc(b,1.18,.78);
+      r=liftShadows(r,32);g=liftShadows(g,28);b=liftShadows(b,26);
+      [r,g,b]=sepiaMix(r,g,b,.06);[r,g,b]=sat(r,g,b,.75);
+      const l=.2126*r+.7152*g+.0722*b;
+      if(l>80&&l<220){r+=10;g+=6;b+=2}if(l<60){r=bc(r,1,1.15);g=bc(g,1,1.15);b=bc(b,1,1.15)}
+      d[i]=clp(r);d[i+1]=clp(g);d[i+2]=clp(b)}},pp:'bloom-skin'},
 
-// Helper: apply sepia mix
-function sepiaMix(r,g,b,amt){
-  const sr=r*.393+g*.769+b*.189,sg=r*.349+g*.686+b*.168,sb=r*.272+g*.534+b*.131;
-  return [r*(1-amt)+sr*amt, g*(1-amt)+sg*amt, b*(1-amt)+sb*amt];
-}
+  fujipro:{css:'saturate(.85) contrast(.88) brightness(1.08) sepia(.08)',
+    apply(d){for(let i=0;i<d.length;i+=4){let r=d[i],g=d[i+1],b=d[i+2];
+      r=liftShadows(r,18);g=liftShadows(g,18);b=liftShadows(b,20);
+      [r,g,b]=sat(r,g,b,.85);r=bc(r,1.08,.88);g=bc(g,1.08,.88);b=bc(b,1.08,.88);
+      const l=.2126*r+.7152*g+.0722*b;if(l>160){r+=6;b+=3}
+      [r,g,b]=sepiaMix(r,g,b,.08);
+      d[i]=clp(r);d[i+1]=clp(g);d[i+2]=clp(b)}},pp:'vignette-soft'},
 
-// Helper: saturation adjust
-function sat(r,g,b,s){
-  const gr=.2126*r+.7152*g+.0722*b;
-  return [gr+(r-gr)*s, gr+(g-gr)*s, gr+(b-gr)*s];
-}
+  a4:{css:'saturate(.9) contrast(.92) brightness(1.0) sepia(.18)',
+    apply(d){for(let i=0;i<d.length;i+=4){let r=d[i],g=d[i+1],b=d[i+2];
+      [r,g,b]=sepiaMix(r,g,b,.18);const l=.2126*r+.7152*g+.0722*b;
+      if(l<120){r+=12;g+=5;b-=6}r=liftShadows(r,20);g=liftShadows(g,18);b=liftShadows(b,15);
+      r=bc(r,1,.92);g=bc(g,1,.92);b=bc(b,1,.92);[r,g,b]=sat(r,g,b,.9);
+      d[i]=clp(r);d[i+1]=clp(g);d[i+2]=clp(b)}},pp:'grain-medium'},
 
-// Helper: brightness + contrast
-function bc(v,br,co){ return (v*br-128)*co+128; }
+  // ── 필름 느낌 ──
+  fs4:{css:'saturate(1.25) contrast(1.05) brightness(1.02) hue-rotate(5deg)',
+    apply(d){for(let i=0;i<d.length;i+=4){let r=d[i],g=d[i+1],b=d[i+2];
+      g=g*1.06;if(r+g+b>400){r+=8;g+=4;b-=4}
+      const l=.2126*r+.7152*g+.0722*b;if(l<100)g+=(100-l)*.06;
+      [r,g,b]=sat(r,g,b,1.25);r=bc(r,1.02,1.05);g=bc(g,1.02,1.05);b=bc(b,1.02,1.05);
+      d[i]=clp(r);d[i+1]=clp(g);d[i+2]=clp(b)}},pp:'grain-fine'},
 
-// Helper: lift shadows (add to dark pixels more than light)
-function liftShadows(v,amount){ return v + amount * (1 - v/255); }
+  kc25:{css:'saturate(1.35) contrast(1.1) brightness(.95) sepia(.2) hue-rotate(-5deg)',
+    apply(d){for(let i=0;i<d.length;i+=4){let r=d[i],g=d[i+1],b=d[i+2];
+      [r,g,b]=sepiaMix(r,g,b,.2);[r,g,b]=sat(r,g,b,1.35);
+      if(r>g){r=r*1.08;g=g*.97}r=bc(r,.95,1.1);g=bc(g,.95,1.1);b=bc(b,.95,1.1);
+      const or=r,og=g;r=r*.92+og*.08;g=g*.9+or*.06+b*.04;
+      r=liftShadows(r,22);g=liftShadows(g,18);b=liftShadows(b,14);
+      [r,g,b]=hueRot(r,g,b,-5);d[i]=clp(r);d[i+1]=clp(g);d[i+2]=clp(b)}},pp:'retro-film'},
 
-const FILTERS = {
-  none:{ css:'none', apply:null, pp:null },
+  // ── 팬톤 뮤트 (모든 색이 톤다운된 파스텔 팬톤) ──
+  pantone:{css:'saturate(.55) contrast(.85) brightness(1.1) sepia(.05)',
+    apply(d){for(let i=0;i<d.length;i+=4){let r=d[i],g=d[i+1],b=d[i+2];
+      [r,g,b]=sat(r,g,b,.55);r=bc(r,1.1,.85);g=bc(g,1.1,.85);b=bc(b,1.1,.85);
+      [r,g,b]=sepiaMix(r,g,b,.05);
+      r=liftShadows(r,15);g=liftShadows(g,15);b=liftShadows(b,15);
+      // 팬톤 특유의 부드러운 파스텔 쉬프트
+      const l=.2126*r+.7152*g+.0722*b;
+      if(l>120){r+=3;g+=2;b+=4} // cool pastel highlights
+      d[i]=clp(r);d[i+1]=clp(g);d[i+2]=clp(b)}},pp:'vignette-soft'},
 
-  // 1. Fuji Superia 400 — green greens, slight green shadows, vivid reds, warm whites, fine grain
-  fs4:{
-    css:'saturate(1.25) contrast(1.05) brightness(1.02) hue-rotate(5deg)',
-    apply(d){
-      for(let i=0;i<d.length;i+=4){
-        let r=d[i],g=d[i+1],b=d[i+2];
-        // Vivid greens: boost green channel slightly
-        g = g * 1.06;
-        // Warm highlights: add warmth to bright areas
-        if(r+g+b > 400){ r+=8; g+=4; b-=4; }
-        // Green shadow tint: add green to dark areas
-        const lum = .2126*r+.7152*g+.0722*b;
-        if(lum < 100){ g += (100-lum)*0.06; }
-        // Saturate 1.25
-        [r,g,b]=sat(r,g,b,1.25);
-        // Slight contrast + brightness
-        r=bc(r,1.02,1.05); g=bc(g,1.02,1.05); b=bc(b,1.02,1.05);
-        d[i]=clp(r);d[i+1]=clp(g);d[i+2]=clp(b);
-      }
-    },
-    pp:'grain-fine'
-  },
+  agfa:{css:'saturate(1.45) contrast(1.1) brightness(1.02) sepia(.15) hue-rotate(-5deg)',
+    apply(d){for(let i=0;i<d.length;i+=4){let r=d[i],g=d[i+1],b=d[i+2];
+      [r,g,b]=sepiaMix(r,g,b,.15);[r,g,b]=sat(r,g,b,1.45);
+      if(r>150)r=r*1.06;if(r>120&&g>100){r+=5;g+=3}
+      r=bc(r,1.02,1.1);g=bc(g,1.02,1.1);b=bc(b,1.02,1.1);
+      const l=.2126*r+.7152*g+.0722*b;if(l<80)b+=4;
+      [r,g,b]=hueRot(r,g,b,-5);d[i]=clp(r);d[i+1]=clp(g);d[i+2]=clp(b)}},pp:'grain-heavy'},
 
-  // 2. Fuji Pro 400H — soft pastel, low contrast, pink-peach highlights, lifted blacks, dreamy
-  fujipro:{
-    css:'saturate(.85) contrast(.88) brightness(1.08) sepia(.08)',
-    apply(d){
-      for(let i=0;i<d.length;i+=4){
-        let r=d[i],g=d[i+1],b=d[i+2];
-        // Lift shadows (raised blacks)
-        r=liftShadows(r,18); g=liftShadows(g,18); b=liftShadows(b,20);
-        // Desaturate slightly
-        [r,g,b]=sat(r,g,b,.85);
-        // Low contrast, higher brightness
-        r=bc(r,1.08,.88); g=bc(g,1.08,.88); b=bc(b,1.08,.88);
-        // Pink-peach highlight tint
-        const lum=.2126*r+.7152*g+.0722*b;
-        if(lum>160){ r+=6; b+=3; }
-        // Soft pastel warmth
-        [r,g,b]=sepiaMix(r,g,b,.08);
-        d[i]=clp(r);d[i+1]=clp(g);d[i+2]=clp(b);
-      }
-    },
-    pp:'vignette-soft'
-  },
+  ccdr:{css:'saturate(1.15) contrast(1.2) brightness(.98) hue-rotate(-8deg)',
+    apply(d){for(let i=0;i<d.length;i+=4){let r=d[i],g=d[i+1],b=d[i+2];
+      b=b*1.08;g=g*1.02;r=bc(r,.98,1.2);g=bc(g,.98,1.2);b=bc(b,.98,1.2);
+      [r,g,b]=sat(r,g,b,1.15);const l=.2126*r+.7152*g+.0722*b;
+      if(l>200){r+=10;g+=5}[r,g,b]=hueRot(r,g,b,-8);
+      d[i]=clp(r);d[i+1]=clp(g);d[i+2]=clp(b)}},pp:'bloom-light'},
 
-  // 3. CCD R — digital retro, slight blue/cyan cast, high clarity, slightly washed, halation bloom feel
-  ccdr:{
-    css:'saturate(1.15) contrast(1.2) brightness(.98) hue-rotate(-8deg)',
-    apply(d){
-      for(let i=0;i<d.length;i+=4){
-        let r=d[i],g=d[i+1],b=d[i+2];
-        // Slight blue/cyan shift
-        b=b*1.08; g=g*1.02;
-        // Higher contrast + clarity
-        r=bc(r,.98,1.2); g=bc(g,.98,1.2); b=bc(b,.98,1.2);
-        // Saturate
-        [r,g,b]=sat(r,g,b,1.15);
-        // Halation: bright areas get slight warm bloom
-        const lum=.2126*r+.7152*g+.0722*b;
-        if(lum>200){ r+=10; g+=5; }
-        // Slight hue rotate
-        [r,g,b]=hueRot(r,g,b,-8);
-        d[i]=clp(r);d[i+1]=clp(g);d[i+2]=clp(b);
-      }
-    },
-    pp:'bloom-light'
-  },
+  // ── 강렬한 색감 ──
+  // 라틴 — 남미 강렬한 따뜻한 색감, 높은 채도, 오렌지/마젠타/틸 강조
+  latin:{css:'saturate(1.8) contrast(1.2) brightness(1.02) hue-rotate(-10deg)',
+    apply(d){for(let i=0;i<d.length;i+=4){let r=d[i],g=d[i+1],b=d[i+2];
+      [r,g,b]=sat(r,g,b,1.8);r=bc(r,1.02,1.2);g=bc(g,1.02,1.2);b=bc(b,1.02,1.2);
+      // 오렌지/마젠타 강조
+      if(r>g){r=r*1.08;b=b*1.04}
+      // 틸 쉐도우
+      const l=.2126*r+.7152*g+.0722*b;
+      if(l<90){g+=8;b+=6;r-=4}
+      // 따뜻한 하이라이트
+      if(l>180){r+=8;g+=3;b-=5}
+      [r,g,b]=hueRot(r,g,b,-10);
+      d[i]=clp(r);d[i+1]=clp(g);d[i+2]=clp(b)}},pp:'vignette-medium'},
 
-  // 4. Kodachrome KC25 — RETRO FILM: color bleed, warm shift, heavy grain, soft focus feel, vignette, aged look
-  kc25:{
-    css:'saturate(1.35) contrast(1.1) brightness(.95) sepia(.2) hue-rotate(-5deg)',
-    apply(d){
-      for(let i=0;i<d.length;i+=4){
-        let r=d[i],g=d[i+1],b=d[i+2];
-        // Warm sepia aged base
-        [r,g,b]=sepiaMix(r,g,b,.2);
-        // Boost reds/oranges (vintage Kodachrome warmth)
-        [r,g,b]=sat(r,g,b,1.35);
-        if(r>g){ r=r*1.08; g=g*.97; }
-        // Slightly darken (old film exposure)
-        r=bc(r,.95,1.1); g=bc(g,.95,1.1); b=bc(b,.95,1.1);
-        // Color bleed: adjacent channel contamination
-        const or=r,og=g;
-        r = r*.92 + og*.08;
-        g = g*.9 + or*.06 + b*.04;
-        // Fade blacks (old film doesn't have true black)
-        r=liftShadows(r,22); g=liftShadows(g,18); b=liftShadows(b,14);
-        // Warm hue shift
-        [r,g,b]=hueRot(r,g,b,-5);
-        d[i]=clp(r);d[i+1]=clp(g);d[i+2]=clp(b);
-      }
-    },
-    pp:'retro-film'
-  },
+  // 사이버펑크 — 네온 블루/핑크/퍼플, 높은 대비, 어두운 무드
+  cyber:{css:'saturate(1.7) contrast(1.4) brightness(.85) hue-rotate(250deg)',
+    apply(d){const c=Math.cos(250*Math.PI/180),s=Math.sin(250*Math.PI/180);
+      for(let i=0;i<d.length;i+=4){let r=d[i],g=d[i+1],b=d[i+2];
+      [r,g,b]=sat(r,g,b,1.7);r=bc(r,.85,1.4);g=bc(g,.85,1.4);b=bc(b,.85,1.4);
+      // 네온 핑크/블루 틴트
+      r+=15;b+=20;g-=8;
+      // 어두운 쉐도우는 보라색
+      const l=.2126*r+.7152*g+.0722*b;
+      if(l<70){r+=10;b+=12;g-=5}
+      // 밝은 부분 시안 글로우
+      if(l>200){g+=8;b+=10}
+      const rr=r*(.213+.787*c-.213*s)+g*(.715-.715*c-.715*s)+b*(.072-.072*c+.928*s);
+      const gg=r*(.213-.213*c+.143*s)+g*(.715+.285*c+.140*s)+b*(.072-.072*c-.283*s);
+      const bb=r*(.213-.213*c-.787*s)+g*(.715-.715*c+.715*s)+b*(.072+.928*c+.072*s);
+      d[i]=clp(rr);d[i+1]=clp(gg);d[i+2]=clp(bb)}},pp:'vignette-medium'},
 
-  // 5. Kodak Portra 400 — 뽀사시 소프트 스킨, 밝고 부드러운 피부톤, 잡티 커버
-  portra:{
-    css:'saturate(.8) contrast(.82) brightness(1.14) sepia(.08)',
-    apply(d){
-      for(let i=0;i<d.length;i+=4){
-        let r=d[i],g=d[i+1],b=d[i+2];
-        // Heavy shadow lift (뽀사시 = no dark shadows on face)
-        r=liftShadows(r,28); g=liftShadows(g,25); b=liftShadows(b,22);
-        // Very bright, very low contrast (softens blemishes by reducing detail contrast)
-        r=bc(r,1.14,.82); g=bc(g,1.14,.82); b=bc(b,1.14,.82);
-        // Soft warm sepia
-        [r,g,b]=sepiaMix(r,g,b,.08);
-        // Desaturate (pastel soft)
-        [r,g,b]=sat(r,g,b,.8);
-        // Warm peachy skin midtones
-        const lum=.2126*r+.7152*g+.0722*b;
-        if(lum>70 && lum<210){ r+=8; g+=4; b-=2; }
-        // Extra brightness push for skin range
-        if(lum>100 && lum<200){ r+=4; g+=3; b+=2; }
-        d[i]=clp(r);d[i+1]=clp(g);d[i+2]=clp(b);
-      }
-    },
-    pp:'bloom-soft'
-  },
+  // ── 특수 ──
+  pixel:{css:'saturate(1.3) contrast(1.3) brightness(1.05)',apply:null,pp:'pixel-art'},
 
-  // 6. VSCO A4 — warm analog, faded, orange-shifted shadows, temperature +8, grain, fade
-  a4:{
-    css:'saturate(.9) contrast(.92) brightness(1.0) sepia(.18)',
-    apply(d){
-      for(let i=0;i<d.length;i+=4){
-        let r=d[i],g=d[i+1],b=d[i+2];
-        // Warm sepia base
-        [r,g,b]=sepiaMix(r,g,b,.18);
-        // Orange shadow tint
-        const lum=.2126*r+.7152*g+.0722*b;
-        if(lum<120){ r+=12; g+=5; b-=6; }
-        // Fade: lift blacks
-        r=liftShadows(r,20); g=liftShadows(g,18); b=liftShadows(b,15);
-        // Slightly lower contrast
-        r=bc(r,1.0,.92); g=bc(g,1.0,.92); b=bc(b,1.0,.92);
-        // Desaturate
-        [r,g,b]=sat(r,g,b,.9);
-        d[i]=clp(r);d[i+1]=clp(g);d[i+2]=clp(b);
-      }
-    },
-    pp:'grain-medium'
-  },
-
-  // 7. Kodak Portra 160 VC — 최고의 뽀사시 피부, 이목구비는 살리면서 피부 밝고 부드럽게
-  p160:{
-    css:'saturate(.75) contrast(.78) brightness(1.18) sepia(.06)',
-    apply(d){
-      for(let i=0;i<d.length;i+=4){
-        let r=d[i],g=d[i+1],b=d[i+2];
-        // Very high brightness, very low contrast → 피부 잡티 날림
-        r=bc(r,1.18,.78); g=bc(g,1.18,.78); b=bc(b,1.18,.78);
-        // Heavy shadow lift
-        r=liftShadows(r,32); g=liftShadows(g,28); b=liftShadows(b,26);
-        // Light sepia warmth
-        [r,g,b]=sepiaMix(r,g,b,.06);
-        // Soft desaturation (pastel)
-        [r,g,b]=sat(r,g,b,.75);
-        // Warm glow to midtones (skin range)
-        const lum=.2126*r+.7152*g+.0722*b;
-        if(lum>80 && lum<220){ r+=10; g+=6; b+=2; }
-        // Preserve contrast in dark areas (eyes, brows, lips) = 이목구비 살림
-        if(lum<60){ r=bc(r,1.0,1.15); g=bc(g,1.0,1.15); b=bc(b,1.0,1.15); }
-        d[i]=clp(r);d[i+1]=clp(g);d[i+2]=clp(b);
-      }
-    },
-    pp:'bloom-skin'
-  },
-
-  // 8. PixelMe — 8-bit 픽셀 아트 카메라 (downsample + posterize + upscale)
-  // CSS preview: posterized high-contrast look (진짜 픽셀화는 캡처 시 적용)
-  pixel:{
-    css:'saturate(1.3) contrast(1.3) brightness(1.05)',
-    apply:null, // special handling in capturePhoto
-    pp:'pixel-art'
-  },
-
-  // 9. Agfa Vista 800 — strong warm tones, high saturation reds/yellows, grainy, vintage warm glow
-  agfa:{
-    css:'saturate(1.45) contrast(1.1) brightness(1.02) sepia(.15) hue-rotate(-5deg)',
-    apply(d){
-      for(let i=0;i<d.length;i+=4){
-        let r=d[i],g=d[i+1],b=d[i+2];
-        // Strong warm sepia base
-        [r,g,b]=sepiaMix(r,g,b,.15);
-        // High saturation
-        [r,g,b]=sat(r,g,b,1.45);
-        // Boost reds/yellows
-        if(r>150){ r=r*1.06; }
-        if(r>120 && g>100){ r+=5; g+=3; }  // yellow boost
-        // Contrast
-        r=bc(r,1.02,1.1); g=bc(g,1.02,1.1); b=bc(b,1.02,1.1);
-        // Cool shadows slightly
-        const lum=.2126*r+.7152*g+.0722*b;
-        if(lum<80){ b+=4; }
-        // Warm shift
-        [r,g,b]=hueRot(r,g,b,-5);
-        d[i]=clp(r);d[i+1]=clp(g);d[i+2]=clp(b);
-      }
-    },
-    pp:'grain-heavy'
-  },
-
-  // 10. B&W Film — 클래식 흑백 필름, 풍부한 톤, 실버 느낌, grain + 비네팅
-  bw:{
-    css:'grayscale(1) contrast(1.15) brightness(1.02)',
-    apply(d){
-      for(let i=0;i<d.length;i+=4){
-        let r=d[i],g=d[i+1],b=d[i+2];
-        // Film-weighted B&W conversion (red-sensitive like Tri-X)
-        let g2 = .25*r + .65*g + .10*b;
-        // Contrast curve: slight S-curve for film-like tonal range
-        g2 = bc(g2,1.02,1.15);
-        // Slight silver warmth: not pure gray, tiny warm tint
-        r=clp(g2+2); g=clp(g2); b=clp(g2-2);
-        // Lift deep shadows (film doesn't have pure black)
-        r=liftShadows(r,10); g=liftShadows(g,10); b=liftShadows(b,8);
-        d[i]=clp(r);d[i+1]=clp(g);d[i+2]=clp(b);
-      }
-    },
-    pp:'bw-film'
-  },
+  // ── 맨 마지막: 흑백 ──
+  bw:{css:'grayscale(1) contrast(1.15) brightness(1.02)',
+    apply(d){for(let i=0;i<d.length;i+=4){let r=d[i],g=d[i+1],b=d[i+2];
+      let v=.25*r+.65*g+.10*b;v=bc(v,1.02,1.15);
+      r=clp(v+2);g=clp(v);b=clp(v-2);
+      r=liftShadows(r,10);g=liftShadows(g,10);b=liftShadows(b,8);
+      d[i]=clp(r);d[i+1]=clp(g);d[i+2]=clp(b)}},pp:'bw-film'},
 };
 
-// ===================================================
-//  State & DOM
-// ===================================================
+// ===== State & DOM =====
 const S={stream:null,zoom:1,minZoom:1,maxZoom:20,facingMode:'environment',isFront:false,
   currentFilter:'none',gridOn:false,flashOn:false,torchTrack:null,capturing:false,
   nativeZoom:false,nativeMax:1,prevThumbUrl:null,photoCount:0,selectedIds:new Set()};
-
 const $=id=>document.getElementById(id);
 const video=$('preview'),canvas=$('captureCanvas'),ctx=canvas.getContext('2d');
 const flash=$('flash'),permScreen=$('permScreen'),permBtn=$('permBtn');
@@ -646,9 +475,7 @@ const galEmpty=$('galEmpty'),galClose=$('galClose');
 const galSelectBtn=$('galSelectBtn'),galShareBtn=$('galShareBtn'),galDeleteBtn=$('galDeleteBtn');
 const viewer=$('viewer'),viewerImg=$('viewerImg'),viewerClose=$('viewerClose');
 
-// ===================================================
-//  IndexedDB
-// ===================================================
+// ===== IndexedDB =====
 let db=null;
 function openDB(){return new Promise((ok,no)=>{const r=indexedDB.open('SilentCamDB',1);r.onupgradeneeded=e=>{e.target.result.createObjectStore('photos',{keyPath:'id',autoIncrement:true})};r.onsuccess=e=>{db=e.target.result;ok(db)};r.onerror=no})}
 function saveToDB(blob,thumb){return new Promise((ok,no)=>{const tx=db.transaction('photos','readwrite');const r=tx.objectStore('photos').add({blob,thumb,ts:Date.now()});r.onsuccess=()=>ok(r.result);r.onerror=no})}
@@ -657,285 +484,158 @@ function getPhoto(id){return new Promise((ok,no)=>{const r=db.transaction('photo
 function deletePhotos(ids){return new Promise((ok,no)=>{const tx=db.transaction('photos','readwrite');const s=tx.objectStore('photos');ids.forEach(id=>s.delete(id));tx.oncomplete=ok;tx.onerror=no})}
 function countPhotos(){return new Promise(ok=>{const r=db.transaction('photos','readonly').objectStore('photos').count();r.onsuccess=()=>ok(r.result);r.onerror=()=>ok(0)})}
 
-// ===================================================
-//  Zoom Arc
-// ===================================================
-const ARC={p0:{x:32,y:284},p1:{x:52,y:150},p2:{x:32,y:16}};
+// ===== Zoom Arc =====
+const ARC={p0:{x:28,y:268},p1:{x:46,y:140},p2:{x:28,y:12}};
 function bzP(t){const u=1-t;return{x:u*u*ARC.p0.x+2*u*t*ARC.p1.x+t*t*ARC.p2.x,y:u*u*ARC.p0.y+2*u*t*ARC.p1.y+t*t*ARC.p2.y}}
 function z2t(z){return Math.log(z/S.minZoom)/Math.log(S.maxZoom/S.minZoom)}
 function t2z(t){t=Math.max(0,Math.min(1,t));return S.minZoom*Math.pow(S.maxZoom/S.minZoom,t)}
 function updateZoomUI(){
-  const t=z2t(S.zoom),pt=bzP(t);
-  arcThumb.setAttribute('cx',pt.x);arcThumb.setAttribute('cy',pt.y);
+  const t=z2t(S.zoom),pt=bzP(t);arcThumb.setAttribute('cx',pt.x);arcThumb.setAttribute('cy',pt.y);
   let d=`M ${ARC.p0.x} ${ARC.p0.y}`;const steps=20,mx=Math.ceil(steps*t);
   for(let i=1;i<=mx;i++){const p=bzP(Math.min(i/steps,t));d+=` L ${p.x.toFixed(1)} ${p.y.toFixed(1)}`}
   arcProgress.setAttribute('d',d);
   zoomBadge.textContent=S.zoom<10?S.zoom.toFixed(1)+'×':Math.round(S.zoom)+'×';
   video.style.transform=(S.isFront?'scaleX(-1) ':'')+'scale('+S.zoom+')';
 }
-function setZoom(z){
-  S.zoom=Math.max(S.minZoom,Math.min(S.maxZoom,z));
+function setZoom(z){S.zoom=Math.max(S.minZoom,Math.min(S.maxZoom,z));
   if(S.nativeZoom&&S.torchTrack)try{S.torchTrack.applyConstraints({advanced:[{zoom:Math.min(S.zoom,S.nativeMax)}]})}catch(e){}
-  updateZoomUI();
-}
+  updateZoomUI()}
 
-// ===================================================
-//  Camera
-// ===================================================
+// ===== Camera =====
 async function startCamera(){
   if(S.stream){S.stream.getTracks().forEach(t=>t.stop());S.stream=null}
-  try{
-    S.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:S.facingMode,width:{ideal:4096},height:{ideal:3072}},audio:false});
-    video.srcObject=S.stream; await video.play();
-    const track=S.stream.getVideoTracks()[0]; S.torchTrack=track;
+  try{S.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:S.facingMode,width:{ideal:4096},height:{ideal:3072}},audio:false});
+    video.srcObject=S.stream;await video.play();
+    const track=S.stream.getVideoTracks()[0];S.torchTrack=track;
     const caps=track.getCapabilities?track.getCapabilities():{};
     if(caps.zoom){S.nativeZoom=true;S.nativeMax=caps.zoom.max||10;S.maxZoom=Math.max(20,S.nativeMax)}
     else{S.nativeZoom=false;S.maxZoom=20}
     S.zoom=1;updateZoomUI();applyFilter(S.currentFilter);
-  }catch(err){console.error('Camera:',err);showToast('카메라를 열 수 없습니다')}
+  }catch(err){showToast('카메라를 열 수 없습니다')}
 }
-document.addEventListener('visibilitychange',()=>{
-  if(!S.stream)return;
+document.addEventListener('visibilitychange',()=>{if(!S.stream)return;
   S.stream.getTracks().forEach(t=>{t.enabled=!document.hidden});
-  if(!document.hidden){const t=S.stream.getVideoTracks()[0];if(!t||t.readyState==='ended')startCamera()}
-});
+  if(!document.hidden){const t=S.stream.getVideoTracks()[0];if(!t||t.readyState==='ended')startCamera()}});
 
-// ===================================================
-//  Filter apply (Safari-safe pixel manipulation)
-// ===================================================
+// ===== Filter apply =====
 function applyFilterCanvas(canvasEl,fCtx,w,h,name){
   const f=FILTERS[name];if(!f||!f.apply)return;
-  const total=w*h,LIM=2000000;
-  if(total>LIM){
-    const r=Math.sqrt(LIM/total),sw=Math.round(w*r),sh=Math.round(h*r);
+  const total=w*h,LIM=2e6;
+  if(total>LIM){const r=Math.sqrt(LIM/total),sw=Math.round(w*r),sh=Math.round(h*r);
     const tmp=document.createElement('canvas');tmp.width=sw;tmp.height=sh;
     const tc=tmp.getContext('2d');tc.drawImage(canvasEl,0,0,sw,sh);
     const id=tc.getImageData(0,0,sw,sh);f.apply(id.data);tc.putImageData(id,0,0);
-    fCtx.drawImage(tmp,0,0,w,h);
-  }else{const id=fCtx.getImageData(0,0,w,h);f.apply(id.data);fCtx.putImageData(id,0,0)}
-}
+    fCtx.drawImage(tmp,0,0,w,h)}
+  else{const id=fCtx.getImageData(0,0,w,h);f.apply(id.data);fCtx.putImageData(id,0,0)}}
 
-// ===================================================
-//  Post-processing
-// ===================================================
-function addGrain(ctx,w,h,int){
-  const gs=256,tmp=document.createElement('canvas');tmp.width=gs;tmp.height=gs;
+// ===== Post-process =====
+function addGrain(ctx,w,h,int){const gs=256,tmp=document.createElement('canvas');tmp.width=gs;tmp.height=gs;
   const tc=tmp.getContext('2d'),id=tc.createImageData(gs,gs),dd=id.data,amt=int*120;
   for(let i=0;i<dd.length;i+=4){const n=(Math.random()-.5)*amt;dd[i]=dd[i+1]=dd[i+2]=128+n;dd[i+3]=Math.min(255,Math.abs(n)*2.5)}
   tc.putImageData(id,0,0);ctx.globalCompositeOperation='overlay';ctx.globalAlpha=int;
-  ctx.drawImage(tmp,0,0,w,h);ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1;
-}
-function addVignette(ctx,w,h,str){
-  const m=Math.max(w,h),g=ctx.createRadialGradient(w/2,h/2,m*.2,w/2,h/2,m*.7);
-  g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,`rgba(0,0,0,${str})`);
-  ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
-}
+  ctx.drawImage(tmp,0,0,w,h);ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1}
+function addVignette(ctx,w,h,str){const m=Math.max(w,h),g=ctx.createRadialGradient(w/2,h/2,m*.2,w/2,h/2,m*.7);
+  g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,`rgba(0,0,0,${str})`);ctx.fillStyle=g;ctx.fillRect(0,0,w,h)}
 function addBloom(ctx,w,h,int){
-  // [FIX #1] Safari-safe bloom: multi-pass downscale = natural blur, no ctx.filter
-  // Step 1: Downscale 4x (acts as box blur)
   const s1=document.createElement('canvas');s1.width=w>>2;s1.height=h>>2;
-  const c1=s1.getContext('2d');c1.drawImage(canvas,0,0,s1.width,s1.height);
-  // Step 2: Downscale again 2x for more blur
+  s1.getContext('2d').drawImage(canvas,0,0,s1.width,s1.height);
   const s2=document.createElement('canvas');s2.width=s1.width>>1;s2.height=s1.height>>1;
-  const c2=s2.getContext('2d');c2.drawImage(s1,0,0,s2.width,s2.height);
-  // Step 3: Upscale back (bilinear = soft) + brighten via lighter composite
-  const s3=document.createElement('canvas');s3.width=w;s3.height=h;
-  const c3=s3.getContext('2d');
-  c3.drawImage(s2,0,0,w,h);
-  // Brighten: draw same image again with lighter blend
-  c3.globalCompositeOperation='lighter';c3.globalAlpha=.3;
-  c3.drawImage(s2,0,0,w,h);
-  c3.globalCompositeOperation='source-over';c3.globalAlpha=1;
-  // Step 4: Screen blend onto original
-  ctx.globalCompositeOperation='screen';ctx.globalAlpha=int;
-  ctx.drawImage(s3,0,0,w,h);
-  ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1;
-}
-
-function postProcess(ctx,w,h,pp){
-  if(!pp)return;
-  switch(pp){
-    case 'grain-fine': addGrain(ctx,w,h,.05); break;
-    case 'grain-medium': addGrain(ctx,w,h,.1); addVignette(ctx,w,h,.2); break;
-    case 'grain-heavy': addGrain(ctx,w,h,.18); addVignette(ctx,w,h,.4); break;
-    case 'vignette-soft': addVignette(ctx,w,h,.2); break;
-    case 'vignette-medium': addVignette(ctx,w,h,.35); break;
-    case 'bloom-light': addBloom(ctx,w,h,.12); break;
-    case 'bloom-soft': addBloom(ctx,w,h,.18); addVignette(ctx,w,h,.15); break;
-    // 뽀사시 스킨 bloom — 더 강한 소프트 글로우
-    case 'bloom-skin': addBloom(ctx,w,h,.25); addVignette(ctx,w,h,.1); break;
-    // 레트로 필름 — 헤비 grain + 강한 비네팅 + 컬러 블리드 느낌
-    case 'retro-film': addGrain(ctx,w,h,.22); addVignette(ctx,w,h,.5); addBloom(ctx,w,h,.08); break;
-    // 흑백 필름 — 중간 grain + 비네팅
-    case 'bw-film': addGrain(ctx,w,h,.12); addVignette(ctx,w,h,.35); break;
-    // 픽셀 아트 — 특별 처리
-    case 'pixel-art': applyPixelArt(ctx,w,h); break;
-  }
-}
-
-// ===================================================
-//  PixelMe — 8-bit 픽셀 아트 변환
-//  1) 다운샘플 (160px) 2) 색상 양자화 3) nearest-neighbor 업스케일
-// ===================================================
+  s2.getContext('2d').drawImage(s1,0,0,s2.width,s2.height);
+  const s3=document.createElement('canvas');s3.width=w;s3.height=h;const c3=s3.getContext('2d');
+  c3.drawImage(s2,0,0,w,h);c3.globalCompositeOperation='lighter';c3.globalAlpha=.3;
+  c3.drawImage(s2,0,0,w,h);c3.globalCompositeOperation='source-over';c3.globalAlpha=1;
+  ctx.globalCompositeOperation='screen';ctx.globalAlpha=int;ctx.drawImage(s3,0,0,w,h);
+  ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1}
+function postProcess(ctx,w,h,pp){if(!pp)return;switch(pp){
+  case 'grain-fine':addGrain(ctx,w,h,.05);break;
+  case 'grain-medium':addGrain(ctx,w,h,.1);addVignette(ctx,w,h,.2);break;
+  case 'grain-heavy':addGrain(ctx,w,h,.18);addVignette(ctx,w,h,.4);break;
+  case 'vignette-soft':addVignette(ctx,w,h,.2);break;
+  case 'vignette-medium':addVignette(ctx,w,h,.35);break;
+  case 'bloom-light':addBloom(ctx,w,h,.12);break;
+  case 'bloom-soft':addBloom(ctx,w,h,.18);addVignette(ctx,w,h,.15);break;
+  case 'bloom-skin':addBloom(ctx,w,h,.25);addVignette(ctx,w,h,.1);break;
+  case 'retro-film':addGrain(ctx,w,h,.22);addVignette(ctx,w,h,.5);addBloom(ctx,w,h,.08);break;
+  case 'bw-film':addGrain(ctx,w,h,.12);addVignette(ctx,w,h,.35);break;
+  case 'pixel-art':applyPixelArt(ctx,w,h);break;
+}}
 function applyPixelArt(ctx,w,h){
-  // 픽셀 크기: 160px 기준으로 비율 계산
-  const pixelBase = 160;
-  const ratio = w/h;
-  const pw = ratio >= 1 ? pixelBase : Math.round(pixelBase * ratio);
-  const ph = ratio >= 1 ? Math.round(pixelBase / ratio) : pixelBase;
-  
-  // Step 1: 작은 캔버스에 다운샘플
-  const small = document.createElement('canvas');
-  small.width = pw; small.height = ph;
-  const sc = small.getContext('2d');
-  sc.imageSmoothingEnabled = true; // bilinear downsample
-  sc.drawImage(canvas, 0, 0, pw, ph);
-  
-  // Step 2: 색상 양자화 (8-bit 팔레트 느낌)
-  const imgData = sc.getImageData(0, 0, pw, ph);
-  const dd = imgData.data;
-  const levels = 8; // 색상 단계 수 (8 = 레트로 게임)
-  const step = 256 / levels;
-  for(let i = 0; i < dd.length; i += 4){
-    dd[i]   = Math.round(dd[i] / step) * step;     // R
-    dd[i+1] = Math.round(dd[i+1] / step) * step;   // G
-    dd[i+2] = Math.round(dd[i+2] / step) * step;   // B
-    // Boost saturation slightly for vivid pixel art
-    const gr = .2126*dd[i] + .7152*dd[i+1] + .0722*dd[i+2];
-    dd[i]   = clp(gr + (dd[i]-gr)*1.4);
-    dd[i+1] = clp(gr + (dd[i+1]-gr)*1.4);
-    dd[i+2] = clp(gr + (dd[i+2]-gr)*1.4);
-  }
-  sc.putImageData(imgData, 0, 0);
-  
-  // Step 3: nearest-neighbor 업스케일 → 픽셀 도트 효과
-  ctx.imageSmoothingEnabled = false; // CRITICAL: nearest neighbor
-  ctx.clearRect(0, 0, w, h);
-  ctx.drawImage(small, 0, 0, w, h);
-  ctx.imageSmoothingEnabled = true; // reset
-}
+  const pb=160,ratio=w/h,pw=ratio>=1?pb:Math.round(pb*ratio),ph=ratio>=1?Math.round(pb/ratio):pb;
+  const sm=document.createElement('canvas');sm.width=pw;sm.height=ph;
+  const sc=sm.getContext('2d');sc.imageSmoothingEnabled=true;sc.drawImage(canvas,0,0,pw,ph);
+  const id=sc.getImageData(0,0,pw,ph),dd=id.data,step=32;
+  for(let i=0;i<dd.length;i+=4){
+    dd[i]=Math.round(dd[i]/step)*step;dd[i+1]=Math.round(dd[i+1]/step)*step;dd[i+2]=Math.round(dd[i+2]/step)*step;
+    const gr=.2126*dd[i]+.7152*dd[i+1]+.0722*dd[i+2];
+    dd[i]=clp(gr+(dd[i]-gr)*1.4);dd[i+1]=clp(gr+(dd[i+1]-gr)*1.4);dd[i+2]=clp(gr+(dd[i+2]-gr)*1.4)}
+  sc.putImageData(id,0,0);
+  ctx.imageSmoothingEnabled=false;ctx.clearRect(0,0,w,h);ctx.drawImage(sm,0,0,w,h);ctx.imageSmoothingEnabled=true}
 
-// ===================================================
-//  Capture — FULL SCREEN SIZE
-// ===================================================
-function createThumb(src,maxSz=200){
-  return new Promise(ok=>{
-    const tw=src.width,th=src.height,r=Math.min(maxSz/tw,maxSz/th);
-    const w=Math.round(tw*r),h=Math.round(th*r);
-    const t=document.createElement('canvas');t.width=w;t.height=h;
-    t.getContext('2d').drawImage(src,0,0,w,h);t.toBlob(b=>ok(b),'image/jpeg',.7);
-  });
-}
+// ===== Capture =====
+function createThumb(src,ms=200){return new Promise(ok=>{const r=Math.min(ms/src.width,ms/src.height),w=Math.round(src.width*r),h=Math.round(src.height*r);
+  const t=document.createElement('canvas');t.width=w;t.height=h;t.getContext('2d').drawImage(src,0,0,w,h);t.toBlob(b=>ok(b),'image/jpeg',.7)})}
 
 async function capturePhoto(){
-  if(S.capturing||!S.stream)return;
-  S.capturing=true;
-  flash.classList.add('fire');captureBtn.classList.add('burst');
-  if(navigator.vibrate)navigator.vibrate(10);
-
+  if(S.capturing||!S.stream)return;S.capturing=true;
+  flash.classList.add('fire');captureBtn.classList.add('burst');if(navigator.vibrate)navigator.vibrate(10);
   const vw=video.videoWidth,vh=video.videoHeight;
   if(!vw||!vh){S.capturing=false;flash.classList.remove('fire');captureBtn.classList.remove('burst');showToast('카메라 준비 중...');return}
-
-  // FULL SCREEN: capture at screen aspect ratio for full-screen photos
-  const screenRatio=window.innerWidth/window.innerHeight;
-  const videoRatio=vw/vh;
-
-  let srcX=0,srcY=0,srcW=vw,srcH=vh;
-  // Match to screen aspect (cover crop)
-  if(videoRatio > screenRatio){
-    srcW=vh*screenRatio; srcX=(vw-srcW)/2;
-  } else {
-    srcH=vw/screenRatio; srcY=(vh-srcH)/2;
-  }
-
-  // Apply zoom crop on top
-  const zCropW=srcW/S.zoom, zCropH=srcH/S.zoom;
-  const zCropX=srcX+(srcW-zCropW)/2, zCropY=srcY+(srcH-zCropH)/2;
-
-  const outW=Math.round(zCropW), outH=Math.round(zCropH);
-  canvas.width=outW;canvas.height=outH;
-  ctx.filter='none';
-
-  if(S.isFront){ctx.save();ctx.translate(outW,0);ctx.scale(-1,1);ctx.drawImage(video,zCropX,zCropY,zCropW,zCropH,0,0,outW,outH);ctx.restore()}
-  else ctx.drawImage(video,zCropX,zCropY,zCropW,zCropH,0,0,outW,outH);
-
-  applyFilterCanvas(canvas,ctx,outW,outH,S.currentFilter);
-  postProcess(ctx,outW,outH,FILTERS[S.currentFilter]?.pp);
-
+  const sr=window.innerWidth/window.innerHeight,vr=vw/vh;
+  let sx=0,sy=0,sw=vw,sh=vh;
+  if(vr>sr){sw=vh*sr;sx=(vw-sw)/2}else{sh=vw/sr;sy=(vh-sh)/2}
+  const zw=sw/S.zoom,zh=sh/S.zoom,zx=sx+(sw-zw)/2,zy=sy+(sh-zh)/2;
+  const ow=Math.round(zw),oh=Math.round(zh);
+  canvas.width=ow;canvas.height=oh;ctx.filter='none';
+  if(S.isFront){ctx.save();ctx.translate(ow,0);ctx.scale(-1,1);ctx.drawImage(video,zx,zy,zw,zh,0,0,ow,oh);ctx.restore()}
+  else ctx.drawImage(video,zx,zy,zw,zh,0,0,ow,oh);
+  applyFilterCanvas(canvas,ctx,ow,oh,S.currentFilter);
+  postProcess(ctx,ow,oh,FILTERS[S.currentFilter]?.pp);
   setTimeout(()=>{flash.classList.remove('fire');captureBtn.classList.remove('burst')},100);
-
-  canvas.toBlob(async blob=>{
-    if(!blob){S.capturing=false;return}
-    try{
-      const thumbBlob=await createThumb(canvas);
-      await saveToDB(blob,thumbBlob);
+  canvas.toBlob(async blob=>{if(!blob){S.capturing=false;return}
+    try{const tb=await createThumb(canvas);await saveToDB(blob,tb);
       if(S.prevThumbUrl)URL.revokeObjectURL(S.prevThumbUrl);
-      const url=URL.createObjectURL(thumbBlob);
-      S.prevThumbUrl=url;galleryThumb.src=url;galleryThumb.style.display='block';
-      S.photoCount++;updateBadge();showToast(`저장됨 (${S.photoCount}장)`);
-    }catch(e){console.error('Save:',e);showToast('저장 실패')}
-    S.capturing=false;
-  },'image/jpeg',.95);
-}
-
+      const u=URL.createObjectURL(tb);S.prevThumbUrl=u;galleryThumb.src=u;galleryThumb.style.display='block';
+      S.photoCount++;updateBadge();showToast(`저장됨 (${S.photoCount}장)`);}
+    catch(e){showToast('저장 실패')}S.capturing=false},'image/jpeg',.95)}
 function updateBadge(){photoBadge.textContent=S.photoCount;photoBadge.classList.toggle('hide',S.photoCount===0)}
 
-// ===================================================
-//  Gallery
-// ===================================================
+// ===== Gallery =====
 async function openGallery(){gallery.classList.add('open');S.selectedIds.clear();updateGalBtns();await renderGallery()}
-function closeGallery(){gallery.classList.remove('open');S.selectedIds.clear();cleanGalUrls()}
-// [FIX #2] Track and revoke gallery blob URLs
-let galUrls=[];
-function cleanGalUrls(){galUrls.forEach(u=>URL.revokeObjectURL(u));galUrls=[]}
-async function renderGallery(){
-  cleanGalUrls(); // [FIX #2] Release previous URLs before re-render
-  const photos=await getAllPhotos();S.photoCount=photos.length;updateBadge();
-  galCount.textContent=photos.length+'장';galGrid.innerHTML='';
-  galEmpty.style.display=photos.length?'none':'flex';
+function closeGallery(){gallery.classList.remove('open');S.selectedIds.clear()}
+async function renderGallery(){const photos=await getAllPhotos();S.photoCount=photos.length;updateBadge();
+  galCount.textContent=photos.length+'장';galGrid.innerHTML='';galEmpty.style.display=photos.length?'none':'flex';
   photos.sort((a,b)=>b.ts-a.ts);
-  for(const p of photos){
-    const div=document.createElement('div');div.className='gal-item';div.dataset.id=p.id;
-    const url=URL.createObjectURL(p.thumb||p.blob);galUrls.push(url);
-    const img=document.createElement('img');img.src=url;img.loading='lazy';
+  for(const p of photos){const div=document.createElement('div');div.className='gal-item';div.dataset.id=p.id;
+    const img=document.createElement('img');img.src=URL.createObjectURL(p.thumb||p.blob);img.loading='lazy';
     const chk=document.createElement('div');chk.className='sel-check';
-    div.appendChild(img);div.appendChild(chk);galGrid.appendChild(div);
-  }
-}
+    div.appendChild(img);div.appendChild(chk);galGrid.appendChild(div)}}
 function toggleSel(id){if(S.selectedIds.has(id))S.selectedIds.delete(id);else S.selectedIds.add(id);updateGalBtns();
   galGrid.querySelectorAll('.gal-item').forEach(el=>el.classList.toggle('selected',S.selectedIds.has(Number(el.dataset.id))))}
-function selectAll(){
-  const items=galGrid.querySelectorAll('.gal-item'),all=S.selectedIds.size===items.length;
+function selectAll(){const items=galGrid.querySelectorAll('.gal-item'),all=S.selectedIds.size===items.length;
   S.selectedIds.clear();if(!all)items.forEach(el=>S.selectedIds.add(Number(el.dataset.id)));
   items.forEach(el=>el.classList.toggle('selected',S.selectedIds.has(Number(el.dataset.id))));
-  galSelectBtn.textContent=all?'전체 선택':'선택 해제';updateGalBtns();
-}
+  galSelectBtn.textContent=all?'전체 선택':'선택 해제';updateGalBtns()}
 function updateGalBtns(){const n=S.selectedIds.size;galShareBtn.disabled=!n;galDeleteBtn.disabled=!n;
   galShareBtn.textContent=n?`내보내기 (${n})`:'내보내기';galDeleteBtn.textContent=n?`삭제 (${n})`:'삭제'}
-async function shareSelected(){
-  if(!S.selectedIds.size)return;const files=[];
+async function shareSelected(){if(!S.selectedIds.size)return;const files=[];
   for(const id of S.selectedIds){const p=await getPhoto(id);if(p)files.push(new File([p.blob],`silent_${p.ts}.jpg`,{type:'image/jpeg'}))}
-  if(navigator.canShare&&navigator.canShare({files})){try{await navigator.share({files,title:'무음 카메라'});showToast('내보내기 완료!')}catch(e){if(e.name!=='AbortError')showToast('내보내기 실패')}}
-  else{for(const f of files){const u=URL.createObjectURL(f),a=document.createElement('a');a.href=u;a.download=f.name;document.body.appendChild(a);a.click();setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(u)},200)}showToast(`${files.length}장 다운로드됨`)}
-}
-async function deleteSelected(){if(!S.selectedIds.size)return;const n=S.selectedIds.size;if(!confirm(`${n}장을 삭제할까요?`))return;
-  await deletePhotos([...S.selectedIds]);S.selectedIds.clear();await renderGallery();showToast(`${n}장 삭제됨`)}
+  if(navigator.canShare&&navigator.canShare({files})){try{await navigator.share({files,title:'무음 카메라'});showToast('완료!')}catch(e){if(e.name!=='AbortError')showToast('실패')}}
+  else{for(const f of files){const u=URL.createObjectURL(f),a=document.createElement('a');a.href=u;a.download=f.name;document.body.appendChild(a);a.click();setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(u)},200)}showToast(`${files.length}장 다운로드`)}}
+async function deleteSelected(){if(!S.selectedIds.size)return;if(!confirm(`${S.selectedIds.size}장 삭제?`))return;
+  await deletePhotos([...S.selectedIds]);S.selectedIds.clear();await renderGallery();showToast('삭제됨')}
 let viewerUrl=null;
-async function openViewer(id){const p=await getPhoto(id);if(!p)return;if(viewerUrl)URL.revokeObjectURL(viewerUrl);viewerUrl=URL.createObjectURL(p.blob);viewerImg.src=viewerUrl;viewer.classList.add('open')}
+async function openViewer(id){const p=await getPhoto(id);if(!p)return;if(viewerUrl)URL.revokeObjectURL(viewerUrl);
+  viewerUrl=URL.createObjectURL(p.blob);viewerImg.src=viewerUrl;viewer.classList.add('open')}
 function closeViewer(){viewer.classList.remove('open')}
 
-// ===================================================
-//  Controls
-// ===================================================
-function showToast(msg,dur=2000){toastMsg.textContent=msg;toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>toast.classList.remove('show'),dur)}
+// ===== Controls =====
+function showToast(msg,dur=2e3){toastMsg.textContent=msg;toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>toast.classList.remove('show'),dur)}
 async function switchCamera(){S.isFront=!S.isFront;S.facingMode=S.isFront?'user':'environment';switchBtn.classList.toggle('flip');S.zoom=1;S.flashOn=false;flashOff.style.display='inline';await startCamera()}
-function toggleFlash(){if(!S.torchTrack)return;if(S.isFront){showToast('전면 카메라는 플래시 미지원');return}S.flashOn=!S.flashOn;flashOff.style.display=S.flashOn?'none':'inline';try{S.torchTrack.applyConstraints({advanced:[{torch:S.flashOn}]})}catch(e){showToast('플래시 사용 불가');S.flashOn=false;flashOff.style.display='inline'}}
+function toggleFlash(){if(!S.torchTrack)return;if(S.isFront){showToast('전면 플래시 미지원');return}S.flashOn=!S.flashOn;flashOff.style.display=S.flashOn?'none':'inline';try{S.torchTrack.applyConstraints({advanced:[{torch:S.flashOn}]})}catch(e){S.flashOn=false;flashOff.style.display='inline'}}
 function toggleGrid(){S.gridOn=!S.gridOn;gridOverlay.style.opacity=S.gridOn?'1':'0'}
 function applyFilter(name){S.currentFilter=name;video.style.filter=FILTERS[name]?.css||'none';document.querySelectorAll('.filter-chip').forEach(c=>c.classList.toggle('active',c.dataset.filter===name))}
 
-// ===================================================
-//  Gestures
-// ===================================================
+// ===== Gestures =====
 let pinchD=0,pinchZ=1,isPinch=false;
 gestureLayer.addEventListener('touchstart',e=>{if(e.touches.length===2){isPinch=true;pinchD=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);pinchZ=S.zoom;e.preventDefault()}else isPinch=false},{passive:false});
 gestureLayer.addEventListener('touchmove',e=>{if(e.touches.length===2&&isPinch&&pinchD>0){setZoom(pinchZ*Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY)/pinchD);e.preventDefault()}},{passive:false});
@@ -945,13 +645,10 @@ function handleArc(e){const r=zoomArcEl.getBoundingClientRect(),t=e.touches?e.to
 zoomArcEl.addEventListener('touchstart',e=>{arcDrag=true;handleArc(e);e.preventDefault();e.stopPropagation()},{passive:false});
 zoomArcEl.addEventListener('touchmove',e=>{if(arcDrag){handleArc(e);e.preventDefault();e.stopPropagation()}},{passive:false});
 zoomArcEl.addEventListener('touchend',()=>{arcDrag=false});
-zoomArcEl.addEventListener('touchcancel',()=>{arcDrag=false});
 let lastArcTap=0;zoomArcEl.addEventListener('click',()=>{const n=Date.now();if(n-lastArcTap<300)setZoom(1);lastArcTap=n});
 
-// ===================================================
-//  Events
-// ===================================================
-permBtn.addEventListener('click',async()=>{try{await startCamera();permScreen.classList.add('hidden');setTimeout(()=>{permScreen.style.display='none'},500)}catch(e){showToast('카메라 권한을 허용해주세요')}});
+// ===== Events =====
+permBtn.addEventListener('click',async()=>{try{await startCamera();permScreen.classList.add('hidden');setTimeout(()=>{permScreen.style.display='none'},600)}catch(e){showToast('카메라 권한을 허용해주세요')}});
 captureBtn.addEventListener('click',e=>{e.stopPropagation();capturePhoto()});
 switchBtn.addEventListener('click',e=>{e.stopPropagation();switchCamera()});
 flashBtn.addEventListener('click',e=>{e.stopPropagation();toggleFlash()});
@@ -962,21 +659,16 @@ galClose.addEventListener('click',()=>closeGallery());
 galSelectBtn.addEventListener('click',()=>selectAll());
 galShareBtn.addEventListener('click',()=>shareSelected());
 galDeleteBtn.addEventListener('click',()=>deleteSelected());
-let galLastTap=0,galLastTapId=-1;galGrid.addEventListener('click',e=>{const item=e.target.closest('.gal-item');if(!item)return;const id=Number(item.dataset.id),now=Date.now();if(now-galLastTap<300&&galLastTapId===id)openViewer(id);else toggleSel(id);galLastTap=now;galLastTapId=id});
+let galLT=0;galGrid.addEventListener('click',e=>{const item=e.target.closest('.gal-item');if(!item)return;const id=Number(item.dataset.id),now=Date.now();if(now-galLT<300)openViewer(id);else toggleSel(id);galLT=now});
 viewerClose.addEventListener('click',()=>closeViewer());viewer.addEventListener('click',e=>{if(e.target===viewer)closeViewer()});
 
-// ===================================================
-//  Init
-// ===================================================
-(async()=>{
-  await openDB();S.photoCount=await countPhotos();updateBadge();
+// ===== Init =====
+(async()=>{await openDB();S.photoCount=await countPhotos();updateBadge();
   if(S.photoCount>0){try{const all=await getAllPhotos();const last=all[all.length-1];if(last?.thumb){const u=URL.createObjectURL(last.thumb);S.prevThumbUrl=u;galleryThumb.src=u;galleryThumb.style.display='block'}}catch(e){}}
-  try{const r=await navigator.permissions.query({name:'camera'});if(r.state==='granted'){await startCamera();permScreen.classList.add('hidden');setTimeout(()=>{permScreen.style.display='none'},500)}}catch(e){}
-})();
+  try{const r=await navigator.permissions.query({name:'camera'});if(r.state==='granted'){await startCamera();permScreen.classList.add('hidden');setTimeout(()=>{permScreen.style.display='none'},600)}}catch(e){}})();
 if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 document.addEventListener('contextmenu',e=>e.preventDefault());
 document.addEventListener('gesturestart',e=>e.preventDefault());
-console.log('🔇 무음 카메라 v4.0 Kinfolk Edition Ready!');
 </script>
 </body>
 </html>
